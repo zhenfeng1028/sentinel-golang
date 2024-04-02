@@ -32,7 +32,7 @@ func (b *AtomicBool) CompareAndSet(old, new bool) bool {
 	if new {
 		newInt = 1
 	}
-	return atomic.CompareAndSwapInt32(&(b.flag), oldInt, newInt)
+	return atomic.CompareAndSwapInt32(&b.flag, oldInt, newInt)
 }
 
 func (b *AtomicBool) Set(value bool) {
@@ -44,8 +44,5 @@ func (b *AtomicBool) Set(value bool) {
 }
 
 func (b *AtomicBool) Get() bool {
-	if atomic.LoadInt32(&(b.flag)) != 0 {
-		return true
-	}
-	return false
+	return atomic.LoadInt32(&(b.flag)) != 0
 }

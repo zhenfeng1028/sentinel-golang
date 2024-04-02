@@ -95,11 +95,6 @@ func Test_AssembleMsg(t *testing.T) {
 		assert.True(t, strings.Contains(got, `"logLevel":"INFO","msg":"test msg8","flag":true`))
 	})
 
-	t.Run("AssembleMsg8", func(t *testing.T) {
-		got := AssembleMsg(2, "INFO", "test msg8", nil, "flag", true)
-		assert.True(t, strings.Contains(got, `"logLevel":"INFO","msg":"test msg8","flag":true`))
-	})
-
 	t.Run("AssembleMsg9", func(t *testing.T) {
 		got := AssembleMsg(2, "INFO", "test msg9", nil, "object", nil)
 		assert.True(t, strings.Contains(got, `"logLevel":"INFO","msg":"test msg9","object":null`))
@@ -114,7 +109,6 @@ func Test_AssembleMsg(t *testing.T) {
 		got := AssembleMsg(2, "INFO", "test msg11", nil, `json`, "{\"abc\":\"xyz\"}")
 		assert.True(t, strings.Contains(got, `"logLevel":"INFO","msg":"test msg11","json":{"abc":"xyz"}`))
 	})
-
 }
 
 func Test_caller(t *testing.T) {

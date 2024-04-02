@@ -323,7 +323,7 @@ func LoadRulesOfResource(res string, rules []*Rule) (bool, error) {
 	return true, err
 }
 
-// getRules returns all the rules。Any changes of rules take effect for flow module
+// getRules returns all the rules. Any changes of rules take effect for flow module
 // getRules is an internal interface.
 func getRules() []*Rule {
 	tcMux.RLock()
@@ -332,7 +332,7 @@ func getRules() []*Rule {
 	return rulesFrom(tcMap)
 }
 
-// getRulesOfResource returns specific resource's rules。Any changes of rules take effect for flow module
+// getRulesOfResource returns specific resource's rules. Any changes of rules take effect for flow module
 // getRulesOfResource is an internal interface.
 func getRulesOfResource(res string) []*Rule {
 	tcMux.RLock()
@@ -388,11 +388,11 @@ func rulesFrom(m TrafficControllerMap) []*Rule {
 	if len(m) == 0 {
 		return rules
 	}
-	for _, rs := range m {
-		if len(rs) == 0 {
+	for _, tcs := range m {
+		if len(tcs) == 0 {
 			continue
 		}
-		for _, r := range rs {
+		for _, r := range tcs {
 			if r != nil && r.BoundRule() != nil {
 				rules = append(rules, r.BoundRule())
 			}
@@ -427,7 +427,7 @@ func generateStatFor(rule *Rule) (*standaloneStatistic, error) {
 	}
 
 	sampleCount := uint32(0)
-	//calculate the sample count
+	// calculate the sample count
 	if intervalInMs > config.GlobalStatisticIntervalMsTotal() {
 		sampleCount = 1
 	} else if intervalInMs < config.GlobalStatisticBucketLengthInMs() {
@@ -450,7 +450,7 @@ func generateStatFor(rule *Rule) (*standaloneStatistic, error) {
 		retStat.readOnlyMetric = readStat
 		retStat.writeOnlyMetric = nil
 		return &retStat, nil
-	} else if err == base.GlobalStatisticNonReusableError {
+	} else if err == base.ErrGlobalStatisticNonReusable {
 		logging.Info("[FlowRuleManager] Flow rule couldn't reuse global statistic and will generate independent statistic", "rule", rule)
 		retStat.reuseResourceStat = false
 		realLeapArray := sbase.NewBucketLeapArray(sampleCount, intervalInMs)

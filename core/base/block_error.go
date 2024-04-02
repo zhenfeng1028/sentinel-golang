@@ -68,7 +68,6 @@ func (e *BlockError) ResetBlockError(opts ...BlockErrorOption) {
 	for _, opt := range opts {
 		opt(e)
 	}
-	return
 }
 
 func (e *BlockError) BlockMsg() string {

@@ -17,7 +17,7 @@ func TestNewBlockError(t *testing.T) {
 	}{
 		{
 			name: "normal",
-			args: struct{ opts []BlockErrorOption }{opts: []BlockErrorOption{
+			args: args{opts: []BlockErrorOption{
 				WithBlockType(BlockTypeFlow),
 				WithBlockMsg("test"),
 				WithRule(new(MockRule)),
@@ -32,10 +32,10 @@ func TestNewBlockError(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := NewBlockError(tt.args.opts...)
-			assert.Equal(t, got.blockType, BlockTypeFlow)
-			assert.Equal(t, got.blockMsg, "test")
-			assert.Equal(t, got.rule, new(MockRule))
-			assert.Equal(t, got.snapshotValue, "snapshot")
+			assert.Equal(t, got.blockType, tt.want.blockType)
+			assert.Equal(t, got.blockMsg, tt.want.blockMsg)
+			assert.Equal(t, got.rule, tt.want.rule)
+			assert.Equal(t, got.snapshotValue, tt.want.snapshotValue)
 		})
 	}
 }

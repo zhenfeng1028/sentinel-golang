@@ -57,7 +57,7 @@ type RuleCheckSlot interface {
 // StatSlot would not handle any panic, and pass up all panic to slot chain
 type StatSlot interface {
 	BaseSlot
-	// OnEntryPass function will be invoked when StatPrepareSlots and RuleCheckSlots execute pass
+	// OnEntryPassed function will be invoked when StatPrepareSlots and RuleCheckSlots execute pass
 	// StatSlots will do some statistic logic, such as QPS、log、etc
 	OnEntryPassed(ctx *EntryContext)
 	// OnEntryBlocked function will be invoked when StatPrepareSlots and RuleCheckSlots fail to execute
@@ -84,22 +84,20 @@ type SlotChain struct {
 	ctxPool *sync.Pool
 }
 
-var (
-	ctxPool = &sync.Pool{
-		New: func() interface{} {
-			ctx := NewEmptyEntryContext()
-			ctx.RuleCheckResult = NewTokenResultPass()
-			ctx.Data = make(map[interface{}]interface{})
-			ctx.Input = &SentinelInput{
-				BatchCount:  1,
-				Flag:        0,
-				Args:        make([]interface{}, 0),
-				Attachments: make(map[interface{}]interface{}),
-			}
-			return ctx
-		},
-	}
-)
+var ctxPool = &sync.Pool{
+	New: func() interface{} {
+		ctx := NewEmptyEntryContext()
+		ctx.RuleCheckResult = NewTokenResultPass()
+		ctx.Data = make(map[interface{}]interface{})
+		ctx.Input = &SentinelInput{
+			BatchCount:  1,
+			Flag:        0,
+			Args:        make([]interface{}, 0),
+			Attachments: make(map[interface{}]interface{}),
+		}
+		return ctx
+	},
+}
 
 func NewSlotChain() *SlotChain {
 	return &SlotChain{
@@ -124,7 +122,7 @@ func (sc *SlotChain) RefurbishContext(c *EntryContext) {
 	}
 }
 
-// AddStatPrepareSlot adds the StatPrepareSlot slot to the StatPrepareSlot list of the SlotChain.
+// AddStatPrepareSlot adds the StatPrepareSlot to the StatPrepareSlot list of the SlotChain.
 // All StatPrepareSlot in the list will be sorted according to StatPrepareSlot.Order() in ascending order.
 // AddStatPrepareSlot is non-thread safe,
 // In concurrency scenario, AddStatPrepareSlot must be guarded by SlotChain.RWMutex#Lock

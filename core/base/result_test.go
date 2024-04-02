@@ -18,8 +18,8 @@ BenchmarkBlockType_String/Map-4            	55307811	        20.0 ns/op
 func BenchmarkBlockType_String(b *testing.B) {
 	b.ReportAllocs()
 
-	//BlockTypeNew1 := BlockType(6)
-	//RegistryBlockType(BlockTypeNew1, "new1")
+	// BlockTypeNew1 := BlockType(6)
+	// RegistryBlockType(BlockTypeNew1, "new1")
 	BlockTypeTmp := BlockTypeFlow
 
 	b.Run("Switch", func(b *testing.B) {
@@ -75,17 +75,14 @@ func (t BlockType) stringSwitch() string {
 	}
 }
 
-var (
-	blockTypeNames = []string{
-		BlockTypeUnknown:          "Unknown",
-		BlockTypeFlow:             "FlowControl",
-		BlockTypeIsolation:        "BlockTypeIsolation",
-		BlockTypeCircuitBreaking:  "CircuitBreaking",
-		BlockTypeSystemFlow:       "System",
-		BlockTypeHotSpotParamFlow: "HotSpotParamFlow",
-	}
-	blockTypeErr = fmt.Errorf("block type err")
-)
+var blockTypeNames = []string{
+	BlockTypeUnknown:          "Unknown",
+	BlockTypeFlow:             "FlowControl",
+	BlockTypeIsolation:        "BlockTypeIsolation",
+	BlockTypeCircuitBreaking:  "CircuitBreaking",
+	BlockTypeSystemFlow:       "System",
+	BlockTypeHotSpotParamFlow: "HotSpotParamFlow",
+}
 
 func (t BlockType) stringMap() string {
 	name, ok := blockTypeMap[t]
@@ -119,27 +116,18 @@ func TestRegistryBlockType(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "New1",
-			args: struct {
-				blockType BlockType
-				desc      string
-			}{blockType: New1BlockType, desc: "New1"},
+			name:    "New1",
+			args:    args{blockType: New1BlockType, desc: "New1"},
 			wantErr: false,
 		},
 		{
-			name: "New2",
-			args: struct {
-				blockType BlockType
-				desc      string
-			}{blockType: New2BlockType, desc: "New2"},
+			name:    "New2",
+			args:    args{blockType: New2BlockType, desc: "New2"},
 			wantErr: false,
 		},
 		{
-			name: "existed",
-			args: struct {
-				blockType BlockType
-				desc      string
-			}{blockType: BlockTypeHotSpotParamFlow, desc: "BlockTypeHotSpotParamFlow"},
+			name:    "existed",
+			args:    args{blockType: BlockTypeHotSpotParamFlow, desc: "BlockTypeHotSpotParamFlow"},
 			wantErr: true,
 		},
 	}

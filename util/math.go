@@ -14,7 +14,9 @@
 
 package util
 
-import "math"
+import (
+	"math"
+)
 
 const precision = 0.00000001
 

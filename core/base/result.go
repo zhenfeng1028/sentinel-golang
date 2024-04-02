@@ -39,14 +39,14 @@ var (
 		BlockTypeSystemFlow:       "BlockTypeSystem",
 		BlockTypeHotSpotParamFlow: "BlockTypeHotSpotParamFlow",
 	}
-	blockTypeExisted = fmt.Errorf("block type existed")
+	errBlockTypeExisted = fmt.Errorf("block type existed")
 )
 
 // RegistryBlockType adds block type and corresponding description in order.
 func RegistryBlockType(blockType BlockType, desc string) error {
 	_, exist := blockTypeMap[blockType]
 	if exist {
-		return blockTypeExisted
+		return errBlockTypeExisted
 	}
 	blockTypeMap[blockType] = desc
 	return nil
@@ -92,20 +92,14 @@ func (r *TokenResult) DeepCopyFrom(newResult *TokenResult) {
 	r.status = newResult.status
 	r.nanosToWait = newResult.nanosToWait
 	if r.blockErr == nil {
-		r.blockErr = &BlockError{
-			blockType:     newResult.blockErr.blockType,
-			blockMsg:      newResult.blockErr.blockMsg,
-			rule:          newResult.blockErr.rule,
-			snapshotValue: newResult.blockErr.snapshotValue,
-		}
-	} else {
-		// TODO: review the reusing logic
-		r.blockErr.blockType = newResult.blockErr.blockType
-		r.blockErr.blockMsg = newResult.blockErr.blockMsg
-		r.blockErr.rule = newResult.blockErr.rule
-		r.blockErr.snapshotValue = newResult.blockErr.snapshotValue
+		r.blockErr = &BlockError{}
 	}
+	r.blockErr.blockType = newResult.blockErr.blockType
+	r.blockErr.blockMsg = newResult.blockErr.blockMsg
+	r.blockErr.rule = newResult.blockErr.rule
+	r.blockErr.snapshotValue = newResult.blockErr.snapshotValue
 }
+
 func (r *TokenResult) ResetToPass() {
 	r.status = ResultStatusPass
 	r.blockErr = nil

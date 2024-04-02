@@ -40,6 +40,5 @@ func SentinelMiddleware(opts ...Option) echo.MiddlewareFunc {
 			err = next(c)
 			return err
 		}
-
 	}
 }

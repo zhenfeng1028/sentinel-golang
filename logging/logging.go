@@ -45,9 +45,7 @@ const (
 	defaultLogMsgBufferSize = 256
 )
 
-var (
-	DefaultDirName = filepath.Join("logs", "csp")
-)
+var DefaultDirName = filepath.Join("logs", "csp")
 
 var (
 	globalLogLevel = InfoLevel
@@ -90,7 +88,7 @@ func NewConsoleLogger() Logger {
 
 // outputFile is the full path(absolute path)
 func NewSimpleFileLogger(filepath string) (Logger, error) {
-	logFile, err := os.OpenFile(filepath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0777)
+	logFile, err := os.OpenFile(filepath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0o777)
 	if err != nil {
 		return nil, err
 	}
@@ -214,12 +212,12 @@ func AssembleMsg(depth int, logLevel, msg string, err error, keysAndValues ...in
 			data := toSafeJSONString(kStr)
 			sb.Write(data)
 			sb.WriteByte(':')
-			switch v.(type) {
+			switch val := v.(type) {
 			case string:
-				data := toSafeJSONString(v.(string))
+				data := toSafeJSONString(val)
 				sb.Write(data)
 			case error:
-				data := toSafeJSONString(v.(error).Error())
+				data := toSafeJSONString(val.Error())
 				sb.Write(data)
 			default:
 				if vbs, err := json.Marshal(v); err != nil {

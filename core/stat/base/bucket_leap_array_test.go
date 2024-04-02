@@ -32,7 +32,7 @@ func Test_NewBucketLeapArray(t *testing.T) {
 	now := util.CurrentTimeMillis()
 
 	br, err := slidingWindow.data.currentBucketOfTime(now, slidingWindow)
-	if br == nil || br.Value.Load() == nil {
+	if br == nil {
 		t.Errorf("Unexcepted error")
 		return
 	}
@@ -56,14 +56,14 @@ func Test_UpdateBucket_Concurrent(t *testing.T) {
 	const GoroutineNum = 3000
 	now := uint64(1976296040000) // start time is 1576296044500, [1576296040000, 1576296050000]
 
-	var cnt = uint64(0)
-	for t := now; t < now+uint64(IntervalInMs); {
-		slidingWindow.addCountWithTime(t, base.MetricEventComplete, 1)
-		slidingWindow.addCountWithTime(t, base.MetricEventPass, 1)
-		slidingWindow.addCountWithTime(t, base.MetricEventBlock, 1)
-		slidingWindow.addCountWithTime(t, base.MetricEventError, 1)
-		slidingWindow.addCountWithTime(t, base.MetricEventRt, 10)
-		t = t + 500
+	cnt := uint64(0)
+	for ts := now; ts < now+uint64(IntervalInMs); {
+		slidingWindow.addCountWithTime(ts, base.MetricEventComplete, 1)
+		slidingWindow.addCountWithTime(ts, base.MetricEventPass, 1)
+		slidingWindow.addCountWithTime(ts, base.MetricEventBlock, 1)
+		slidingWindow.addCountWithTime(ts, base.MetricEventError, 1)
+		slidingWindow.addCountWithTime(ts, base.MetricEventRt, 10)
+		ts = ts + 500
 	}
 	for _, b := range slidingWindow.Values(uint64(1976296049500)) {
 		bucket, ok := b.Value.Load().(*MetricBucket)

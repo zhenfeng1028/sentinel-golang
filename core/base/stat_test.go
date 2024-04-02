@@ -71,12 +71,10 @@ func (m *StatNodeMock) CurrentConcurrency() int32 {
 
 func (m *StatNodeMock) IncreaseConcurrency() {
 	m.Called()
-	return
 }
 
 func (m *StatNodeMock) DecreaseConcurrency() {
 	m.Called()
-	return
 }
 
 func (m *StatNodeMock) GenerateReadStat(sampleCount uint32, intervalInMs uint32) (ReadStat, error) {
@@ -85,12 +83,12 @@ func (m *StatNodeMock) GenerateReadStat(sampleCount uint32, intervalInMs uint32)
 }
 
 func TestCheckValidityForReuseStatistic(t *testing.T) {
-	assert.Equal(t, CheckValidityForReuseStatistic(3, 1000, 20, 10000), IllegalStatisticParamsError)
-	assert.Equal(t, CheckValidityForReuseStatistic(0, 1000, 20, 10000), IllegalStatisticParamsError)
-	assert.Equal(t, CheckValidityForReuseStatistic(2, 1000, 21, 10000), IllegalGlobalStatisticParamsError)
-	assert.Equal(t, CheckValidityForReuseStatistic(2, 1000, 0, 10000), IllegalGlobalStatisticParamsError)
-	assert.Equal(t, CheckValidityForReuseStatistic(2, 8000, 20, 10000), GlobalStatisticNonReusableError)
-	assert.Equal(t, CheckValidityForReuseStatistic(2, 1000, 10, 10000), GlobalStatisticNonReusableError)
+	assert.Equal(t, CheckValidityForReuseStatistic(3, 1000, 20, 10000), ErrIllegalStatisticParams)
+	assert.Equal(t, CheckValidityForReuseStatistic(0, 1000, 20, 10000), ErrIllegalStatisticParams)
+	assert.Equal(t, CheckValidityForReuseStatistic(2, 1000, 21, 10000), ErrIllegalGlobalStatisticParams)
+	assert.Equal(t, CheckValidityForReuseStatistic(2, 1000, 0, 10000), ErrIllegalGlobalStatisticParams)
+	assert.Equal(t, CheckValidityForReuseStatistic(2, 8000, 20, 10000), ErrGlobalStatisticNonReusable)
+	assert.Equal(t, CheckValidityForReuseStatistic(2, 1000, 10, 10000), ErrGlobalStatisticNonReusable)
 	assert.Equal(t, CheckValidityForReuseStatistic(1, 1000, 100, 10000), nil)
 	assert.Equal(t, CheckValidityForReuseStatistic(2, 1000, 20, 10000), nil)
 }

@@ -57,8 +57,7 @@ func NopReadStat() *nopReadStat {
 	return globalNopReadStat
 }
 
-type nopReadStat struct {
-}
+type nopReadStat struct{}
 
 func (rs *nopReadStat) GetQPS(_ MetricEvent) float64 {
 	return 0.0
@@ -89,8 +88,7 @@ func NopWriteStat() *nopWriteStat {
 	return globalNopWriteStat
 }
 
-type nopWriteStat struct {
-}
+type nopWriteStat struct{}
 
 func (ws *nopWriteStat) AddCount(_ MetricEvent, _ int64) {
 }
@@ -116,14 +114,14 @@ type StatNode interface {
 }
 
 var (
-	IllegalGlobalStatisticParamsError = errors.New("Invalid parameters, sampleCount or interval, for resource's global statistic")
-	IllegalStatisticParamsError       = errors.New("Invalid parameters, sampleCount or interval, for metric statistic")
-	GlobalStatisticNonReusableError   = errors.New("The parameters, sampleCount and interval, mismatch for reusing between resource's global statistic and readonly metric statistic.")
+	ErrIllegalGlobalStatisticParams = errors.New("invalid parameters, sampleCount or interval, for resource's global statistic")
+	ErrIllegalStatisticParams       = errors.New("invalid parameters, sampleCount or interval, for metric statistic")
+	ErrGlobalStatisticNonReusable   = errors.New("the parameters, sampleCount and interval, mismatch for reusing between resource's global statistic and readonly metric statistic")
 )
 
 func CheckValidityForStatistic(sampleCount, intervalInMs uint32) error {
 	if intervalInMs == 0 || sampleCount == 0 || intervalInMs%sampleCount != 0 {
-		return IllegalStatisticParamsError
+		return ErrIllegalStatisticParams
 	}
 	return nil
 }
@@ -137,22 +135,22 @@ func CheckValidityForStatistic(sampleCount, intervalInMs uint32) error {
 // The parameters, parentSampleCount and parentIntervalInMs, are the attributes of the underlying statistics data-structure.
 func CheckValidityForReuseStatistic(sampleCount, intervalInMs uint32, parentSampleCount, parentIntervalInMs uint32) error {
 	if intervalInMs == 0 || sampleCount == 0 || intervalInMs%sampleCount != 0 {
-		return IllegalStatisticParamsError
+		return ErrIllegalStatisticParams
 	}
 	bucketLengthInMs := intervalInMs / sampleCount
 
 	if parentIntervalInMs == 0 || parentSampleCount == 0 || parentIntervalInMs%parentSampleCount != 0 {
-		return IllegalGlobalStatisticParamsError
+		return ErrIllegalGlobalStatisticParams
 	}
 	parentBucketLengthInMs := parentIntervalInMs / parentSampleCount
 
 	// intervalInMs of the SlidingWindowMetric is not divisible by BucketLeapArray's intervalInMs
 	if parentIntervalInMs%intervalInMs != 0 {
-		return GlobalStatisticNonReusableError
+		return ErrGlobalStatisticNonReusable
 	}
 	// BucketLeapArray's BucketLengthInMs is not divisible by BucketLengthInMs of SlidingWindowMetric
 	if bucketLengthInMs%parentBucketLengthInMs != 0 {
-		return GlobalStatisticNonReusableError
+		return ErrGlobalStatisticNonReusable
 	}
 	return nil
 }

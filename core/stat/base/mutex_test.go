@@ -43,7 +43,7 @@ func utTriableMutexConcurrent(t *testing.T) {
 	wg := &sync.WaitGroup{}
 	wg.Add(1000)
 	for i := 0; i < 1000; i++ {
-		go func(tm *mutex, wgi *sync.WaitGroup, cntPtr *int32, t *testing.T) {
+		go func(tm *mutex, wgi *sync.WaitGroup, cntPtr *int32) {
 			for {
 				if tm.TryLock() {
 					*cntPtr = *cntPtr + 1
@@ -54,10 +54,9 @@ func utTriableMutexConcurrent(t *testing.T) {
 					runtime.Gosched()
 				}
 			}
-		}(m, wg, &cnt, t)
+		}(m, wg, &cnt)
 	}
 	wg.Wait()
-	//fmt.Println("count=", cnt)
 	if cnt != 1000 {
 		t.Error("count error concurrency")
 	}

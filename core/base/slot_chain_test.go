@@ -34,9 +34,7 @@ func (spl *StatPrepareSlotMock1) Order() uint32 {
 	return spl.order
 }
 
-func (spl *StatPrepareSlotMock1) Prepare(ctx *EntryContext) {
-	return
-}
+func (spl *StatPrepareSlotMock1) Prepare(ctx *EntryContext) {}
 
 func TestSlotChain_AddStatPrepareSlot(t *testing.T) {
 	sc := NewSlotChain()
@@ -98,6 +96,7 @@ func (rcs *RuleCheckSlotMock1) Order() uint32 {
 func (rcs *RuleCheckSlotMock1) Check(ctx *EntryContext) *TokenResult {
 	return nil
 }
+
 func TestSlotChain_AddRuleCheckSlot(t *testing.T) {
 	sc := NewSlotChain()
 	for i := 9; i >= 0; i-- {
@@ -155,15 +154,12 @@ func (ss *StatSlotMock1) Order() uint32 {
 	return ss.order
 }
 
-func (ss *StatSlotMock1) OnEntryPassed(ctx *EntryContext) {
-	return
-}
-func (ss *StatSlotMock1) OnEntryBlocked(ctx *EntryContext, blockError *BlockError) {
-	return
-}
-func (ss *StatSlotMock1) OnCompleted(ctx *EntryContext) {
-	return
-}
+func (ss *StatSlotMock1) OnEntryPassed(ctx *EntryContext) {}
+
+func (ss *StatSlotMock1) OnEntryBlocked(ctx *EntryContext, blockError *BlockError) {}
+
+func (ss *StatSlotMock1) OnCompleted(ctx *EntryContext) {}
+
 func TestSlotChain_AddStatSlot(t *testing.T) {
 	sc := NewSlotChain()
 	for i := 9; i >= 0; i-- {
@@ -223,7 +219,6 @@ func (m *prepareSlotMock) Order() uint32 {
 
 func (m *prepareSlotMock) Prepare(ctx *EntryContext) {
 	m.Called(ctx)
-	return
 }
 
 type mockRuleCheckSlot1 struct {
@@ -262,15 +257,14 @@ func (m *statisticSlotMock) Order() uint32 {
 
 func (m *statisticSlotMock) OnEntryPassed(ctx *EntryContext) {
 	m.Called(ctx)
-	return
 }
+
 func (m *statisticSlotMock) OnEntryBlocked(ctx *EntryContext, blockError *BlockError) {
 	m.Called(ctx, blockError)
-	return
 }
+
 func (m *statisticSlotMock) OnCompleted(ctx *EntryContext) {
 	m.Called(ctx)
-	return
 }
 
 func TestSlotChain_Entry_Pass_And_Exit(t *testing.T) {

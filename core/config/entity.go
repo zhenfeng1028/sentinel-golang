@@ -256,6 +256,7 @@ func (entity *Entity) GlobalStatisticSampleCountTotal() uint32 {
 func (entity *Entity) MetricStatisticIntervalMs() uint32 {
 	return entity.Sentinel.Stat.MetricStatisticIntervalMs
 }
+
 func (entity *Entity) MetricStatisticSampleCount() uint32 {
 	return entity.Sentinel.Stat.MetricStatisticSampleCount
 }

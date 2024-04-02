@@ -109,8 +109,7 @@ func Test_leapArray_calculateTimeIdx_normal(t *testing.T) {
 }
 
 func Test_calculateStartTime_normal(t *testing.T) {
-	type fields struct {
-	}
+	type fields struct{}
 	type args struct {
 		timeMillis       uint64
 		bucketLengthInMs uint32
@@ -185,7 +184,7 @@ func Test_leapArray_valuesWithTime_normal(t *testing.T) {
 				bucketLengthInMs: BucketLengthInMs,
 				sampleCount:      SampleCount,
 				intervalInMs:     IntervalInMs,
-				array:            NewAtomicBucketWrapArrayWithTime(int(SampleCount), BucketLengthInMs, uint64(1596199310000), &leapArrayMock{}),
+				array:            NewAtomicBucketWrapArrayWithTime(int(SampleCount), BucketLengthInMs, uint64(1576296040000), &leapArrayMock{}),
 			},
 			args: args{
 				timeMillis: 1576296049907,
@@ -193,13 +192,6 @@ func Test_leapArray_valuesWithTime_normal(t *testing.T) {
 			want:    nil,
 			wantErr: false,
 		},
-	}
-	// override start time
-	start := uint64(1576296040000)
-	for idx := 0; idx < tests[0].fields.array.length; idx++ {
-		ww := tests[0].fields.array.get(idx)
-		ww.BucketStart = start
-		start += 500
 	}
 
 	for _, tt := range tests {

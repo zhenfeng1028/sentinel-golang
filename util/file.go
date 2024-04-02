@@ -27,8 +27,9 @@ func FilePosition(file *os.File) (int64, error) {
 	return file.Seek(0, io.SeekCurrent)
 }
 
-func FileExists(name string) (b bool, err error) {
-	if _, err := os.Stat(name); err != nil {
+func FileExists(name string) (bool, error) {
+	var err error
+	if _, err = os.Stat(name); err != nil {
 		if os.IsNotExist(err) {
 			return false, nil
 		}

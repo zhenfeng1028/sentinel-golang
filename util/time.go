@@ -84,7 +84,7 @@ func (t *RealClock) CurrentTimeMillis() uint64 {
 	if tickerNow > uint64(0) {
 		return tickerNow
 	}
-	return uint64(time.Now().UnixNano()) / UnixTimeUnitOffset
+	return uint64(time.Now().UnixMilli())
 }
 
 func (t *RealClock) CurrentTimeNano() uint64 {
@@ -120,7 +120,7 @@ func (t *MockClock) Sleep(d time.Duration) {
 }
 
 func (t *MockClock) CurrentTimeMillis() uint64 {
-	return uint64(t.Now().UnixNano()) / UnixTimeUnitOffset
+	return uint64(t.Now().UnixMilli())
 }
 
 func (t *MockClock) CurrentTimeNano() uint64 {
@@ -255,7 +255,7 @@ func CurrentClock() Clock {
 	return currentClock.Load().(*clockWrapper).clock
 }
 
-// SetClock sets the ticker creator used by util package.
+// SetTickerCreator sets the ticker creator used by util package.
 // In general, no need to set it. It is usually used for testing.
 func SetTickerCreator(tc TickerCreator) {
 	currentTickerCreator.Store(&tickerCreatorWrapper{tc})

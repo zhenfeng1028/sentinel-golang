@@ -39,13 +39,13 @@ type BucketWrap struct {
 	Value atomic.Value
 }
 
-func (ww *BucketWrap) resetTo(startTime uint64) {
-	ww.BucketStart = startTime
-}
+// func (ww *BucketWrap) resetTo(startTime uint64) {
+// 	ww.BucketStart = startTime
+// }
 
-func (ww *BucketWrap) isTimeInBucket(now uint64, bucketLengthInMs uint32) bool {
-	return ww.BucketStart <= now && now < ww.BucketStart+uint64(bucketLengthInMs)
-}
+// func (ww *BucketWrap) isTimeInBucket(now uint64, bucketLengthInMs uint32) bool {
+// 	return ww.BucketStart <= now && now < ww.BucketStart+uint64(bucketLengthInMs)
+// }
 
 func calculateStartTime(now uint64, bucketLengthInMs uint32) uint64 {
 	return now - (now % uint64(bucketLengthInMs))
@@ -135,6 +135,12 @@ func (aa *AtomicBucketWrapArray) compareAndSet(idx int, except, update *BucketWr
 	return false
 }
 
+//	 B0       B1      B2     B3      B4
+//	 |_______|_______|_______|_______|_______|
+//	 0      200     400     600     800     1000 (ms)
+//   |_______|_______|_______|_______|_______|
+//	1000    1200    1400    1600    1800    2000  (ms)
+
 // LeapArray represents the fundamental implementation of a sliding window data-structure.
 //
 // Some important attributes: the sampleCount represents the number of buckets,
@@ -190,7 +196,7 @@ func (la *LeapArray) currentBucketOfTime(now uint64, bg BucketGenerator) (*Bucke
 	idx := la.calculateTimeIdx(now)
 	bucketStart := calculateStartTime(now, la.bucketLengthInMs)
 
-	for { //spin to get the current BucketWrap
+	for { // spin to get the current BucketWrap
 		old := la.array.get(idx)
 		if old == nil {
 			// because la.array.data had initiated when new la.array

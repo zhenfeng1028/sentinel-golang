@@ -25,7 +25,7 @@ type ExitHandler func(entry *SentinelEntry, ctx *EntryContext) error
 
 type SentinelEntry struct {
 	res *ResourceWrapper
-	// one entry bounds with one context
+	// one entry binds with one context
 	ctx *EntryContext
 
 	exitHandlers []ExitHandler
@@ -75,7 +75,7 @@ func WithError(err error) ExitOption {
 }
 
 func (e *SentinelEntry) Exit(exitOps ...ExitOption) {
-	var options = ExitOptions{
+	options := ExitOptions{
 		err: nil,
 	}
 	for _, opt := range exitOps {
@@ -90,6 +90,7 @@ func (e *SentinelEntry) Exit(exitOps ...ExitOption) {
 	}
 	e.exitCtl.Do(func() {
 		defer func() {
+			// This should not happen, unless there are errors existing in Sentinel internal.
 			if err := recover(); err != nil {
 				logging.Error(errors.Errorf("%+v", err), "Sentinel internal panic in SentinelEntry.Exit()")
 			}

@@ -17,10 +17,10 @@ package datasource
 type Code uint32
 
 const (
-	OK                  = iota
-	ConvertSourceError  = 1
-	UpdatePropertyError = 2
-	HandleSourceError   = 3
+	OK = iota
+	ConvertSourceError
+	UpdatePropertyError
+	HandleSourceError
 )
 
 func NewError(code Code, desc string) Error {

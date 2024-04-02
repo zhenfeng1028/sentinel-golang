@@ -27,7 +27,7 @@ func TestFormatTimeMillis(t *testing.T) {
 	type args struct {
 		ts uint64
 	}
-	_, offset := time.Now().Zone()
+	_, offset := time.Now().Zone() // offset 28800
 	offsetMs := uint64(offset * 1000)
 
 	tests := []struct {
@@ -99,7 +99,7 @@ func TestFormatDate(t *testing.T) {
 
 func TestCurrentTimeMillis(t *testing.T) {
 	got := CurrentTimeMillis()
-	fmt.Printf("CurrentTimeMillis() %d", got)
+	fmt.Printf("CurrentTimeMillis() %d ", got)
 	fmt.Println(FormatTimeMillis(got))
 }
 
@@ -113,7 +113,7 @@ func TestMockClock(t *testing.T) {
 
 	now := clock.Now()
 	assert.Equal(t, clock.CurrentTimeNano(), uint64(now.UnixNano()))
-	assert.Equal(t, clock.CurrentTimeMillis(), uint64(now.UnixNano()/1e6))
+	assert.Equal(t, clock.CurrentTimeMillis(), uint64(now.UnixMilli()))
 
 	last := now
 	d := 23*time.Hour + 59*time.Minute + 59*time.Second + 999*time.Millisecond + 999*time.Microsecond
@@ -184,7 +184,7 @@ func BenchmarkCurrentTimeInMs(b *testing.B) {
 		if tickerNow > uint64(0) {
 			return tickerNow
 		}
-		return uint64(time.Now().UnixNano()) / UnixTimeUnitOffset
+		return uint64(time.Now().UnixMilli())
 	}
 
 	b.ReportAllocs()

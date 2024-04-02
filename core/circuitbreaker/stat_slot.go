@@ -22,14 +22,11 @@ const (
 	StatSlotOrder = 5000
 )
 
-var (
-	DefaultMetricStatSlot = &MetricStatSlot{}
-)
+var DefaultMetricStatSlot = &MetricStatSlot{}
 
 // MetricStatSlot records metrics for circuit breaker on invocation completed.
 // MetricStatSlot must be filled into slot chain if circuit breaker is alive.
-type MetricStatSlot struct {
-}
+type MetricStatSlot struct{}
 
 func (s *MetricStatSlot) Order() uint32 {
 	return StatSlotOrder
@@ -37,12 +34,10 @@ func (s *MetricStatSlot) Order() uint32 {
 
 func (c *MetricStatSlot) OnEntryPassed(_ *base.EntryContext) {
 	// Do nothing
-	return
 }
 
 func (c *MetricStatSlot) OnEntryBlocked(_ *base.EntryContext, _ *base.BlockError) {
 	// Do nothing
-	return
 }
 
 func (c *MetricStatSlot) OnCompleted(ctx *base.EntryContext) {

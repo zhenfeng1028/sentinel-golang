@@ -15,7 +15,6 @@
 package config
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -92,7 +91,7 @@ func OverrideConfigFromEnvAndInitLog() error {
 func loadGlobalConfigFromYamlFile(filePath string) error {
 	if filePath == DefaultConfigFilename {
 		if _, err := os.Stat(DefaultConfigFilename); err != nil {
-			//use default globalCfg.
+			// use default globalCfg.
 			return nil
 		}
 	}
@@ -100,7 +99,7 @@ func loadGlobalConfigFromYamlFile(filePath string) error {
 	if err != nil && !os.IsExist(err) {
 		return err
 	}
-	content, err := ioutil.ReadFile(filePath)
+	content, err := os.ReadFile(filePath)
 	if err != nil {
 		return err
 	}
@@ -259,6 +258,7 @@ func GlobalStatisticBucketLengthInMs() uint32 {
 func MetricStatisticIntervalMs() uint32 {
 	return globalCfg.MetricStatisticIntervalMs()
 }
+
 func MetricStatisticSampleCount() uint32 {
 	return globalCfg.MetricStatisticSampleCount()
 }

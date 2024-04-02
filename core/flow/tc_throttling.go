@@ -51,6 +51,7 @@ func NewThrottlingChecker(owner *TrafficShapingController, timeoutMs uint32, sta
 		lastPassedTime:    0,
 	}
 }
+
 func (c *ThrottlingChecker) BoundOwner() *TrafficShapingController {
 	return c.owner
 }

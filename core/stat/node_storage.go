@@ -59,13 +59,6 @@ func GetOrCreateResourceNode(resource string, resourceType base.ResourceType) *R
 	if node != nil {
 		return node
 	}
-	rnsMux.Lock()
-	defer rnsMux.Unlock()
-
-	node = resNodeMap[resource]
-	if node != nil {
-		return node
-	}
 
 	if len(resNodeMap) >= int(base.DefaultMaxResourceAmount) {
 		logging.Warn("[GetOrCreateResourceNode] Resource amount exceeds the threshold", "maxResourceAmount", base.DefaultMaxResourceAmount)

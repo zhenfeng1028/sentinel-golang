@@ -112,7 +112,7 @@ type Rule struct {
 	// limitation: LowMemUsageThreshold > HighMemUsageThreshold && MemHighWaterMarkBytes > MemLowWaterMarkBytes
 	// if the current memory usage is less than or equals to MemLowWaterMarkBytes, threshold == LowMemUsageThreshold
 	// if the current memory usage is more than or equals to MemHighWaterMarkBytes, threshold == HighMemUsageThreshold
-	// if  the current memory usage is in (MemLowWaterMarkBytes, MemHighWaterMarkBytes), threshold is in (HighMemUsageThreshold, LowMemUsageThreshold)
+	// if the current memory usage is in (MemLowWaterMarkBytes, MemHighWaterMarkBytes), threshold is in (HighMemUsageThreshold, LowMemUsageThreshold)
 	LowMemUsageThreshold  int64 `json:"lowMemUsageThreshold"`
 	HighMemUsageThreshold int64 `json:"highMemUsageThreshold"`
 	MemLowWaterMarkBytes  int64 `json:"memLowWaterMarkBytes"`

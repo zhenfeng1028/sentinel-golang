@@ -22,12 +22,9 @@ const (
 	RuleCheckSlotOrder = 5000
 )
 
-var (
-	DefaultSlot = &Slot{}
-)
+var DefaultSlot = &Slot{}
 
-type Slot struct {
-}
+type Slot struct{}
 
 func (s *Slot) Order() uint32 {
 	return RuleCheckSlotOrder
